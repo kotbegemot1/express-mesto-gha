@@ -11,7 +11,7 @@ const getUserById = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Пользователь не найден!" });
+        res.status(400).send({ message: "Некорректный id" });
       } else {
         res.status(500).send({ message: "Произошла ошибка!" })
       }
@@ -25,7 +25,7 @@ const createUser = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы некорректные данные!" });
+        res.status(404).send({ message: "Переданы некорректные данные!" });
       } else {
         res.status(500).send({ message: "Произошла ошибка!" })
       }
