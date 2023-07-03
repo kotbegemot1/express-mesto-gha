@@ -45,10 +45,19 @@ const putLikeOnCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: "Карточка не найдена" });
+      }
+      res.send(card)
+    })
     .catch((err) => {
       console.log(err.name);
-      res.status(500).send({ message: "Произошла ошибка!" })
+      if (err.name === "CastError") {
+        res.status(400).send({ message: "Переданы некорректные данные!" });
+      } else {
+        res.status(500).send({ message: "Произошла ошибка!" })
+      }
     });
 };
 
@@ -58,8 +67,20 @@ const pullLikeOnCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
-    .then((card) => res.send(card))
-    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
+  .then((card) => {
+    if (!card) {
+      res.status(404).send({ message: "Карточка не найдена" });
+    }
+    res.send(card)
+  })
+  .catch((err) => {
+    console.log(err.name);
+    if (err.name === "CastError") {
+      res.status(400).send({ message: "Переданы некорректные данные!" });
+    } else {
+      res.status(500).send({ message: "Произошла ошибка!" })
+    }
+  });
     };
 
 module.exports = {
