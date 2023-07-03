@@ -23,10 +23,16 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: "Карточка не найдена" });
+      }
+      res.send(card)
+    })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(404).send({ message: "Переданы некорректные данные!" });
+      console.log(err.name);
+      if (err.name === "CastError") {
+        res.status(400).send({ message: "Переданы некорректные данные!" });
       } else {
         res.status(500).send({ message: "Произошла ошибка!" })
       }
