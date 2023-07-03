@@ -8,10 +8,15 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   User.findById(req.params.id)
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: "Пользователь не найден" });
+      }
+      res.send(user)
+    })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Некорректный id" });
+        res.status(400).send({ message: "Переданы некорректные данные!" });
       } else {
         res.status(500).send({ message: "Произошла ошибка!" })
       }
