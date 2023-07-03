@@ -3,11 +3,7 @@ const Card = require("../models/cards");
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(500).send({ message: "Произошла ошибка!" });
-      }
-    });
+    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
 };
 
 const createCard = (req, res) => {
@@ -17,8 +13,10 @@ const createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === "CastError") {
+      if (err.name === "ValidationError") {
         res.status(400).send({ message: "Переданы некорректные данные!" });
+      } else {
+        res.status(500).send({ message: "Произошла ошибка!" })
       }
     });
 };
@@ -26,11 +24,7 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => res.send(card))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(500).send({ message: "Произошла ошибка!" });
-      }
-    });
+    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
 };
 
 const putLikeOnCard = (req, res) => {
@@ -40,11 +34,7 @@ const putLikeOnCard = (req, res) => {
     { new: true, runValidators: true },
   )
     .then((card) => res.send(card))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(500).send({ message: "Произошла ошибка!" });
-      }
-    });
+    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
 };
 
 const pullLikeOnCard = (req, res) => {
@@ -54,12 +44,8 @@ const pullLikeOnCard = (req, res) => {
     { new: true, runValidators: true },
   )
     .then((card) => res.send(card))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(500).send({ message: "Произошла ошибка!" });
-      }
-    });
-};
+    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
+    };
 
 module.exports = {
   getCards,
