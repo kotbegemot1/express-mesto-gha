@@ -24,7 +24,13 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => res.send(card))
-    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        res.status(404).send({ message: "Переданы некорректные данные!" });
+      } else {
+        res.status(500).send({ message: "Произошла ошибка!" })
+      }
+    });
 };
 
 const putLikeOnCard = (req, res) => {
@@ -34,7 +40,10 @@ const putLikeOnCard = (req, res) => {
     { new: true, runValidators: true },
   )
     .then((card) => res.send(card))
-    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
+    .catch((err) => {
+      console.log(err.name);
+      res.status(500).send({ message: "Произошла ошибка!" })
+    });
 };
 
 const pullLikeOnCard = (req, res) => {
