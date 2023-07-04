@@ -3,7 +3,7 @@ const Card = require("../models/cards");
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send({ message: "Произошла ошибка!" }));
+    .catch(() => res.status(500).send({ message: "На сервере произошла ошибка" }));
 };
 
 const createCard = (req, res) => {
@@ -16,7 +16,7 @@ const createCard = (req, res) => {
       if (err.name === "ValidationError") {
         res.status(400).send({ message: "Переданы некорректные данные!" });
       } else {
-        res.status(500).send({ message: "Произошла ошибка!" })
+        res.status(500).send({ message: "На сервере произошла ошибка" })
       }
     });
 };
@@ -34,7 +34,7 @@ const deleteCard = (req, res) => {
       if (err.name === "CastError") {
         res.status(400).send({ message: "Переданы некорректные данные!" });
       } else {
-        res.status(500).send({ message: "Произошла ошибка!" })
+        res.status(500).send({ message: "На сервере произошла ошибка" })
       }
     });
 };
@@ -56,7 +56,7 @@ const putLikeOnCard = (req, res) => {
       if (err.name === "CastError") {
         res.status(400).send({ message: "Переданы некорректные данные!" });
       } else {
-        res.status(500).send({ message: "Произошла ошибка!" })
+        res.status(500).send({ message: "На сервере произошла ошибка" })
       }
     });
 };
@@ -78,7 +78,7 @@ const pullLikeOnCard = (req, res) => {
     if (err.name === "CastError") {
       res.status(400).send({ message: "Переданы некорректные данные!" });
     } else {
-      res.status(500).send({ message: "Произошла ошибка!" })
+      res.status(500).send({ message: "На сервере произошла ошибка" })
     }
   });
     };
