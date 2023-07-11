@@ -11,10 +11,9 @@ module.exports = (req, res, next) => {
     // eslint-disable-next-line no-unused-vars
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError('Необходима авторизовация');
   }
 
   req.user = payload;
