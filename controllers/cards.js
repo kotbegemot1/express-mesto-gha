@@ -31,7 +31,7 @@ const deleteCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена');
       }
       if (req.user._id !== card.owner.id) {
-        throw new ForbiddenError('Чужую карточку удалить нельзя')
+        throw new ForbiddenError('Чужую карточку удалить нельзя');
       }
       card.deleteOne(card)
       // eslint-disable-next-line no-shadow
