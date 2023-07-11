@@ -53,14 +53,14 @@ const validateCreateUser = celebrate({
     about: Joi.string().min(2).max(30).optional(),
     avatar: Joi.string().regex(urlRegex).optional(),
     email: Joi.string().required().email(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,}$/),
+    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,}$/).required(),
   }),
 });
 
 const validateLogin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,}$/),
+    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,}$/).required(),
   }),
 });
 
