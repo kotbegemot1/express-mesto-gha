@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const auth = require('./middlewares/auth');
 
+const NotFoundError = require('./errors/notFoundError');
+
 const {
   validateCreateUser,
   validateLogin,
@@ -30,7 +32,7 @@ app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.use('*', (req, res) => res.status(404).send({ message: 'Неправильный путь' }));
+app.use('*', (req, res, next) => next(new NotFoundError('Непрвильный путь')));
 
 app.use(errors());
 
