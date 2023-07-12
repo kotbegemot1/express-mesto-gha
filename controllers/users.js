@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const NotFoundError = require('../errors/notFoundError');
-const UnauthorizedError = require('../errors/unauthorizedError');
 const BadRequestError = require('../errors/badRequestError');
 const ConflictError = require('../errors/conflictError');
 
@@ -11,10 +10,6 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        // eslint-disable-next-line new-cap
-        throw new UnauthorizedError('Пользователь не найден');
-      }
       const token = jwt.sign(
         { _id: user._id },
         'some-secret-key',
@@ -49,6 +44,7 @@ const getUserById = (req, res, next) => {
       if (err.name === 'CastError') {
         // eslint-disable-next-line new-cap
         next(new BadRequestError('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
@@ -71,24 +67,18 @@ const createUser = (req, res, next) => {
     password: hash,
   }))
     .then((user) => {
-      if (!user) {
-        // eslint-disable-next-line new-cap
-        throw new NotFoundError('Пользователь не найден');
-      }
-      const userWithoutPassword = user.toObject();
-      delete userWithoutPassword.password;
-      res.send(userWithoutPassword);
+      res.send(user.toJSON());
     })
     .catch((err) => {
       if (err.code === 11000) {
         // eslint-disable-next-line new-cap
         next(new ConflictError('при регистрации указан email, который уже существует на сервере'));
-      }
-      if (err.name === 'ValidationError') {
+      } else if (err.name === 'ValidationError') {
         // eslint-disable-next-line new-cap
         next(new BadRequestError('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -111,6 +101,7 @@ const updateUserInfo = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
@@ -123,6 +114,7 @@ const updateUserAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });

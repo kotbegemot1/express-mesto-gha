@@ -34,6 +34,15 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.set('toJSON', {
+  // eslint-disable-next-line no-unused-vars
+  transform(doc, ret, options) {
+    // eslint-disable-next-line no-param-reassign
+    delete ret.password;
+    return ret;
+  },
+});
+
 // eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentials = function (email, password) {
   // eslint-disable-next-line no-undef
