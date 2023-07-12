@@ -77,7 +77,7 @@ const createUser = (req, res, next) => {
       }
       const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
-      res.send(userWithoutPassword.toJSON());
+      res.send(userWithoutPassword);
     })
     .catch((err) => {
       if (err.code === 11000) {
