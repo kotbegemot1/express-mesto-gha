@@ -75,6 +75,8 @@ const createUser = (req, res, next) => {
         // eslint-disable-next-line new-cap
         throw new NotFoundError('Пользователь не найден');
       }
+      const userWithoutPassword = user.toObject();
+      delete userWithoutPassword.password;
       res.send(user);
     })
     .catch((err) => {
