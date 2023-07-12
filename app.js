@@ -36,7 +36,8 @@ app.use('*', (req, res, next) => next(new NotFoundError('Непрвильный 
 
 app.use(errors());
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
+  console.log(err.message);
   const { statusCode = 500, message } = err;
 
   res
